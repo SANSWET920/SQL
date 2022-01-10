@@ -1,0 +1,95 @@
+CREATE TABLE dept
+(
+deptno INT PRIMARY KEY,
+dname VARCHAR(20),
+loc VARCHAR(10)
+);
+
+INSERT INTO dept VALUES (40,'ACCOUNTING','NEW YORK');	
+INSERT INTO dept VALUES (20,'RESEARCH','DALLAS');
+INSERT INTO dept VALUES (30,'SALES','CHICAGO');
+INSERT INTO dept VALUES (10,'OPERATIONS','BOSTON');
+
+Select * from dept  --clear
+
+
+CREATE TABLE emp
+(
+empno INT                PRIMARY KEY,      -- unique and not null
+ename VARCHAR(20)        NOT NULL,         -- cannot leave blank
+job VARCHAR(10)          DEFAULT 'CLERK',  -- if not job is entered SQL will put Clerk 
+mgr INT,
+hiredate DATE,
+sal DECIMAL(9,2)         check(sal>0),     -- check if salary is negative
+comm DECIMAL(7,2),
+deptno INT,
+foreign key (deptno) references dept (deptno)  -- set foreign key constraint on the dept
+);
+
+
+INSERT INTO emp VALUES (7369,'SMITH','CLERK',7902,'1890-12-17',800,NULL,20);  
+INSERT INTO emp VALUES (7499,'ALLEN','SALESMAN',7698,'1981-02-20',1600,300,30);
+INSERT INTO emp VALUES (7521,'WARD','SALESMAN',7698,'1981-02-22',1250,500,30); 
+INSERT INTO emp VALUES (7566,'JONES','MANAGER',7839,'1981-04-02',2975,NULL,20);
+INSERT INTO emp VALUES (7654,'MARTIN','SALESMAN',7698,'1981-09-28',1250,1400,30);
+INSERT INTO emp VALUES (7698,'BLAKE','MANAGER',7839,'1981-05-01',2850,NULL,30);
+INSERT INTO emp VALUES (7782,'CLARK','MANAGER',7839,'1981-06-09',2450,NULL,10);
+INSERT INTO emp VALUES (7788,'SCOTT','ANALYST',7566,'1987-04-19',3000,NULL,20);
+INSERT INTO emp VALUES (7839,'KING','PRESIDENT',NULL,'1981-11-17',5000,NULL,10);
+INSERT INTO emp VALUES (7844,'TURNER','SALESMAN',7698,'1981-09-08',1500,0,30);
+INSERT INTO emp VALUES (7876,'ADAMS','CLERK',7788,'1987-05-23',1100,NULL,20);
+INSERT INTO emp VALUES (7900,'JAMES','CLERK',7698,'1981-12-03',950,NULL,30);  
+INSERT INTO emp VALUES (7902,'FORD','ANALYST',7566,'1981-12-03',3000,NULL,20);
+INSERT INTO emp VALUES (7934,'MILLER','CLERK',7782,'1982-01-23',1300,NULL,10);
+
+
+ Select * from dept     --clear
+ 
+ Select * from emp       --clear
+ 
+
+ Select ename from emp WHERE sal between 1000 and 2000;       --clear
+
+ Select ename from emp WHERE ename like '%i_';            --clear
+
+ Select ename from emp WHERE ename like '%r';             --clear
+
+ Select ename from emp WHERE ename like 'j%';             --clear
+
+ Select ename from emp WHERE ename like '_L%';            --clear 
+  
+ Select ename, hiredate from emp WHERE Hiredate < '1981-09-30';         --clear
+  
+ select ename, sal, sal*0.4 as allowances,sal*0.1 as PF , sal + sal * 0.4 + sal * 0.1 as net_salary from emp;     -- Doubt
+
+ Select ename, sal, sal*0.4 as allowances,sal*0.1 as PF , sal + (Sal * 0.4) - (Sal * 0.1) as Deductions FROM Emp;     -- Doubt
+
+ /*
+ Select sal, allowances, pf, sal + allowances PF as Netsalary
+ from  
+ (select sal, Sal*0.4 as Allowances , sal * 0.1 as pf from emp) Temp;         --Doubt 
+  */
+
+  Select Year(Hiredate), Year(GETDATE()) from emp;         --clear 
+
+  Select Year(GETDATE()) - Year(Hiredate) from emp;          --clear
+
+  Select ename, sal from emp where Year(GETDATE())-Year(Hiredate) > 2;          --clear
+
+  Select job from emp;             --clear          
+
+  Select Distinct job from emp;          --clear
+
+  select ename from emp where comm is null ;         --clear
+
+  Select ename, job from emp where mgr is NULL;         --clear
+
+  Select empno , ename , sal FROM emp ORDER BY sal;       --clear
+
+  Select empno , Hiredate FROM emp ORDER BY Hiredate DESC;        --clear
+
+  Select * FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS;          --clear
+
+--DROP Table dept
+
+--DROP Table emp
