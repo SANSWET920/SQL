@@ -93,3 +93,339 @@ INSERT INTO emp VALUES (7934,'MILLER','CLERK',7782,'1982-01-23',1300,NULL,10);
 --DROP Table dept
 
 --DROP Table emp
+
+
+
+
+
+CREATE TABLE Country ( COuntrycode int ,
+                       CountryShortname Char(2),
+					   CountryFullname Char(10),
+					    );
+
+					   
+
+INSERT INTO COUNTRY VALUES ( 91 , 'IN', 'INDIA');
+INSERT INTO COUNTRY VALUES ( 03 , 'CH', 'CHINA');
+INSERT INTO COUNTRY VALUES ( 01 , 'USA', 'UNITED STATES');
+
+SELECT * FROM COUNTRY;
+
+UPDATE Country set COuntrycode = 91 where CountryShortname = 'IN' ;
+
+DELETE from Country where COuntrycode = 33;
+
+
+use SQLTraining;
+use AdventureWorksDW2014;
+
+Alter Table dbo.Country alter Column Countryshortname char(3); -- Microsoft SQL 
+Alter Table dbo.Country alter Column Countryfullname Varchar(20); -- Microsoft SQL 
+
+Alter Table dbo.Country ADD  AlternateCountryname Varchar(20) ; -- Microsoft SQL
+ 
+Alter Table dbo.Country DROP COLUMN AlternateCountryname  ; -- Microsoft SQL
+
+ALter Table Country rename column Countrycode to areacode;-- does not work in SQL server  
+
+DROP TABLE COUNTRY ;
+
+EXecute sp_rename 'Country.Alternatename','CountryfullName','COLUMN';
+
+TRUNCATE TABLE Country; 
+ 
+
+
+
+CREATE TABLE dept
+(
+deptno INT PRIMARY KEY,
+dname VARCHAR(20),
+loc VARCHAR(10)
+);
+
+INSERT INTO dept VALUES (40,'ACCOUNTING','NEW YORK');	
+INSERT INTO dept VALUES (20,'RESEARCH','DALLAS');
+INSERT INTO dept VALUES (30,'SALES','CHICAGO');
+INSERT INTO dept VALUES (10,'OPERATIONS','BOSTON');
+
+Select * from dept  --clear
+
+
+CREATE TABLE emp
+(
+empno INT                PRIMARY KEY,      -- unique and not null
+ename VARCHAR(20)        NOT NULL,         -- cannot leave blank
+job VARCHAR(10)          DEFAULT 'CLERK',  -- if not job is entered SQL will put Clerk 
+mgr INT,
+hiredate DATE,
+sal DECIMAL(9,2)         check(sal>0),     -- check if salary is negative
+comm DECIMAL(7,2),
+deptno INT,
+foreign key (deptno) references dept (deptno)  -- set foreign key constraint on the dept
+);
+
+
+INSERT INTO emp VALUES (7369,'SMITH','CLERK',7902,'1890-12-17',800,NULL,20);  
+INSERT INTO emp VALUES (7499,'ALLEN','SALESMAN',7698,'1981-02-20',1600,300,30);
+INSERT INTO emp VALUES (7521,'WARD','SALESMAN',7698,'1981-02-22',1250,500,30); 
+INSERT INTO emp VALUES (7566,'JONES','MANAGER',7839,'1981-04-02',2975,NULL,20);
+INSERT INTO emp VALUES (7654,'MARTIN','SALESMAN',7698,'1981-09-28',1250,1400,30);
+INSERT INTO emp VALUES (7698,'BLAKE','MANAGER',7839,'1981-05-01',2850,NULL,30);
+INSERT INTO emp VALUES (7782,'CLARK','MANAGER',7839,'1981-06-09',2450,NULL,10);
+INSERT INTO emp VALUES (7788,'SCOTT','ANALYST',7566,'1987-04-19',3000,NULL,20);
+INSERT INTO emp VALUES (7839,'KING','PRESIDENT',NULL,'1981-11-17',5000,NULL,10);
+INSERT INTO emp VALUES (7844,'TURNER','SALESMAN',7698,'1981-09-08',1500,0,30);
+INSERT INTO emp VALUES (7876,'ADAMS','CLERK',7788,'1987-05-23',1100,NULL,20);
+INSERT INTO emp VALUES (7900,'JAMES','CLERK',7698,'1981-12-03',950,NULL,30);  
+INSERT INTO emp VALUES (7902,'FORD','ANALYST',7566,'1981-12-03',3000,NULL,20);
+INSERT INTO emp VALUES (7934,'MILLER','CLERK',7782,'1982-01-23',1300,NULL,10);
+
+
+ Select * from dept     --clear
+ 
+ 
+ 
+
+ Select ename from emp WHERE sal between 1000 and 2000;       --clear
+
+ Select ename from emp WHERE ename like '%i_';            --clear
+
+ Select ename from emp WHERE ename like '%r';             --clear
+
+ Select ename from emp WHERE ename like 'j%';             --clear
+
+ Select ename from emp WHERE ename like '_L%';            --clear 
+  
+ Select ename, hiredate from emp WHERE Hiredate < '1981-09-30';         --clear
+  
+ select ename, sal, sal*0.4 as allowances,sal*0.1 as PF , sal + sal * 0.4 + sal * 0.1 as net_salary from emp;     -- Doubt
+
+ Select ename, sal, sal*0.4 as allowances,sal*0.1 as PF , sal + (Sal * 0.4) - (Sal * 0.1) as Deductions FROM Emp;     -- Doubt
+
+ /*
+ Select sal, allowances, pf, sal + allowances PF as Netsalary
+ from  
+ (select sal, Sal*0.4 as Allowances , sal * 0.1 as pf from emp) Temp;         --Doubt 
+  */
+
+  Select Year(Hiredate), Year(GETDATE()) from emp;         --clear 
+
+  Select Year(GETDATE()) - Year(Hiredate) from emp;          --clear
+
+  Select ename, sal from emp where Year(GETDATE())-Year(Hiredate) > 2;          --clear
+
+  Select job from emp;             --clear          
+
+  Select Distinct job from emp;          --clear
+
+  select ename from emp where comm is null ;         --clear
+
+  Select ename, job from emp where mgr is NULL;         --clear
+
+  Select empno , ename , sal FROM emp ORDER BY sal;       --clear
+
+  Select empno , Hiredate FROM emp ORDER BY Hiredate DESC;        --clear
+
+  Select * FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS;          --clear
+
+  --    alter table emp drop constraint FK_emp_deptno_5070F446;          --Doubt
+
+--DROP Table dept
+
+--DROP Table emp
+
+ 
+  Select COUNT(ename) From emp;     --clear
+
+  Select COUNT(*) From emp;      --clear
+
+  Select COUNT(empno) From emp;           --clear
+
+  Select COUNT(job) from emp;             --clear
+
+  Select COUNT(Distinct job) from emp;              --clear
+
+  Select SUM(sal) From emp WHERE job = 'SALESMAN';          --clear
+
+  Select AVG(sal), COUNT(*) from emp WHERE deptno = 20;           --clear
+
+  Select deptno, SUM(sal) FROM emp GROUP BY deptno;             --clear
+
+  Select deptno , COUNT(*) from emp GROUP BY deptno;             --clear
+
+  Select deptno , COUNT(ename) from emp GROUP BY deptno;          --clear
+
+  Select deptno , COUNT(empno) from emp GROUP BY deptno;           --clear
+
+  Select deptno , job , AVG(sal) from emp GROUP BY deptno , job ORDER BY DEPTNO;         --clear
+
+  Select deptno , job , AVG(sal) from emp GROUP BY deptno , job ORDER BY 1;          --clear
+
+  Select deptno , AVG(sal) from emp GROUP BY deptno HAVING COUNT(*) > 5;             --clear
+
+
+ -----------------------------------------------------------------------------------------------------------------------------------------
+
+  
+create TABLE SALESPEOPLE(
+   snum int primary key,
+   sname varchar(20),
+   city varchar(20),
+   comm decimal(3,2) 
+);
+
+
+insert into SALESPEOPLE values (1001,'Peel','London',.12);
+insert into SALESPEOPLE values (1002,'Serres','San Jose',.13);
+insert into SALESPEOPLE values (1004,'Motika','London',.11);
+insert into SALESPEOPLE values (1007,'Rafkin','Barcelona',.15);
+insert into SALESPEOPLE values (1003,'Axelrod','New york',.1);
+    
+
+ Select * from SALESPEOPLE;
+
+
+ create table orders(
+onum int primary key,
+amt decimal (7,2),
+odate date,
+cnum int ,
+snum int ,
+foreign key (Cnum) references cust (cnum),
+foreign key (snum) references SALESPEOPLE (snum)
+
+);
+
+
+insert into orders values(3001, 18.69, '1994-10-03', 2008, 1007);
+insert into orders values(3003, 767.19, '1994-10-03', 2001, 1001);
+insert into orders values(3002, 1900.10, '1994-10-03', 2007, 1004);
+insert into orders values(3005, 5160.45 , '1994-10-03', 2003, 1002);
+insert into orders values(3006, 1098.16, '1994-10-04', 2008, 1007);
+insert into orders values(3009, 1713.23 , '1994-10-04', 2002, 1003);
+insert into orders values(3007, 75.75 , '1994-10-05', 2004, 1002);
+insert into orders values(3008, 4723.00 , '1994-10-05', 2006, 1001);
+insert into orders values(3010, 1309.95  , '1994-10-06', 2004, 1002);
+insert into orders values(3011, 9891.88  , '1994-10-06', 2006, 1001);
+
+
+
+
+
+create table cust(
+cnum int primary key,
+cname varchar(20),
+city varchar (20),
+rating int,
+snum int,
+foreign key (snum) references salespeople (snum)
+);
+
+
+insert into cust values (2001, 'Hoffman', 'London', 100, 1001);
+insert into cust values (2002, 'Giovanne', 'Rome', 200, 1003);
+insert into cust values (2003, 'Liu', 'San Jose', 300, 1002);
+insert into cust values (2004, 'Grass', 'Berlin', 100, 1002);
+insert into cust values (2006, 'Clemens', 'London', 300, 1007);
+insert into cust values (2007, 'Pereira', 'Rome', 100, 1004);
+insert into cust values (2008, 'James', 'London', 200, 1007);
+
+
+
+Select * from SALESPEOPLE;
+
+Select * from orders;
+
+Select * from cust;
+
+
+
+ Select city , MAX(RATING) FROM cust GROUP BY city;
+ 
+
+
+ select count(*) from orders where odate = '1994-10-03';
+
+
+ Select count(Distinct(city)) as distinct_City_Coust from cust
+
+
+ Select MIN(amt) from orders ;
+
+
+ 
+ create table job_grades(
+		     grade char(1),
+             lowest_sal int,
+             highest_sal int
+);
+
+ insert into job_grades values
+ ('A', 0, 999),
+ ('B', 1000, 1999),
+ ('C', 2000, 2999), 
+ ('D', 3000, 3999),
+ ('E', 4000, 5000);
+
+ Select * from job_grades;
+
+  1--Write a query to match the salespeople to the customers according to the city they are living.
+   SELECT s.sname, c.cname ,c.city ,s.city
+   from SALESPEOPLE S
+   left join cust C on C.snum = S.snum
+   where c.city = s.city
+ 
+ 2--write a query to select the names of customers and the salespersons who are providing service to them.
+   SELECT s.sname, c.cname
+   from SALESPEOPLE S
+   left join cust C on C.snum = S.snum
+
+
+ 3--Write a quary to find out all orders by customers not located in the same cities as that of their of their salespeople.
+   SELECT s.sname, c.cname ,c.city ,s.city
+   from SALESPEOPLE S
+   left join cust C on C.snum = S.snum
+   where c.city != s.city
+
+
+
+ 4--Write a query that lists each order number followed by name of customer who made that order
+   SELECT o.onum , c.cname 
+   from orders o 
+   left join cust c on o.cnum = c.cnum
+
+
+
+ --2
+ Select * from orders where amt >(SELECT AVG(amt) From orders WHERE odate = '1994-10-04');
+
+
+ --3
+ Select * from orders where snum IN (SELECT snum from SALESPEOPLE WHERE  city = 'London');
+
+
+ --4
+ Select * from cust where (cnum-1000) > snum;
+
+ --5
+ Select * from cust where rating > (SELECT AVG(rating) FROM cust WHERE city = 'San Jose');
+
+ --6
+ Select * from SALESPEOPLE where snum IN (SELECT snum FROM cust GROUP BY snum HAVING COUNT(cnum) > 1);
+
+ --7
+ Select * from SALESPEOPLE where snum IN (SELECT snum FROM orders GROUP BY cnum HAVING );
+
+
+ SELECT S1.SNAME,S2.SNAME,S1.CITY
+ FROM SALESPEOPLE S1
+ INNER JOIN SALESPEOPLE S2
+ ON S1.CITY =S2.CITY AND S1.SNUM<S2.SNUM;
+
+ Select Avg(amt) from orders where Odate = '1994-10-04')
+
+ Select Sname from SALESPEOPLE where Snum in (
+ Select snum from Cust GROUP BY Snum having count(*) > 1)
+
+
